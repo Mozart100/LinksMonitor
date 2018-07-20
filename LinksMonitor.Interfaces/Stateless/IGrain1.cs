@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Orleans;
 
-namespace LinksMonitor.Interfaces
+namespace LinksMonitor.Interfaces.Stateless
 {
     /// <summary>
     /// Grain interface IGrain1
@@ -10,4 +10,5 @@ namespace LinksMonitor.Interfaces
     {
         Task<string> SayHello();
     }
+
 }

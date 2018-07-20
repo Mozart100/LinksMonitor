@@ -1,5 +1,5 @@
 ﻿using Ark.StepRunner.CustomAttribute;
-using LinksMonitor.Interfaces;
+using LinksMonitor.Interfaces.Stateless;
 using Orleans;
 using Orleans.Runtime.Configuration;
 using Serilog;
@@ -91,29 +91,13 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
         [ABusinessStepScenario((int)ScenarioSteps.SendValidSingleRequest, "Sending single request.")]
         public void SendValidSingleRequest()
         {
-            var friend = _client.GetGrain<IGrain1>(0);
-            _logger.Information("\n\n{0}\n\n", friend.SayHello().Result);
+            //var friend1 = _client.GetGrain<IGrain1>(0);
+            //var hellow = friend1.SayHello();
+            //_logger.Information("\n\n{0}\n\n", friend.SayHello().Result);
+            var friend = _client.GetGrain<IGrainPageDownloader>(Guid.NewGuid()).DownloadPage("http://en.wikipedia.org/").Result;
 
         }
 
-
-        //[ABusinessStepScenario((int)ScenarioSteps.SendingIndex, "Sending Index.")]
-        //public ScenarioStepReturnNextStep SendingIndex()
-        //{
-
-
-
-        //    return new ScenarioStepReturnNextStep(age, isOver50);
-        //}
-
-        ////--------------------------------------------------------------------------------------------------------------------------------------
-
-
-        //[AStepCleanupScenario((int)ScenarioSteps.CancelAllRunningThreads, "Cancel All running threads.")]
-        //public void CancelAllRunningThreads()
-        //{
-        //    _cancellationTokenSource.Cancel();
-        //}
 
         //--------------------------------------------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------------------------------------------
