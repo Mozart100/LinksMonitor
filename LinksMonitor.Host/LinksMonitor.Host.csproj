@@ -98,6 +98,16 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LinksMonitor.Grains\LinksMonitor.Grains.csproj">
+      <Project>{bd716a27-fecb-46e7-ab8c-d2c7faabe5f1}</Project>
+      <Name>LinksMonitor.Grains</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LinksMonitor.Interfaces\LinksMonitor.Interfaces.csproj">
+      <Project>{a9cdaefa-397a-4639-9899-ba7803d7802e}</Project>
+      <Name>LinksMonitor.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Orleans.CounterControl.1.5.0\build\Microsoft.Orleans.CounterControl.targets" Condition="Exists('..\packages\Microsoft.Orleans.CounterControl.1.5.0\build\Microsoft.Orleans.CounterControl.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

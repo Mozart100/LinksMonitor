@@ -1,5 +1,5 @@
 using System;
-
+using LinksMonitor.Interfaces;
 using Orleans;
 using Orleans.Runtime.Configuration;
 using Orleans.Runtime.Host;
@@ -31,6 +31,9 @@ namespace LinksMonitor.Host
             //
             // This is the place for your test code.
             //
+
+            var friend = client.GetGrain<IGrain1>(0);
+            var result = friend.SayHello().Result;
 
             Console.WriteLine("\nPress Enter to terminate...");
             Console.ReadLine();
