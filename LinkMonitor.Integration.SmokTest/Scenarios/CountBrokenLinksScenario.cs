@@ -122,7 +122,7 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
         {
             foreach (var item in Process.GetProcesses())
             {
-                if (item.ProcessName.ToLower().Equals("LinksMonitor.Host.exe"))
+                if (item.ProcessName.ToLower().Contains("LinksMonitor.Host".ToLower()))
                 {
                     try
                     {
