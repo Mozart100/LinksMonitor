@@ -1,8 +1,10 @@
 ﻿using Ark.StepRunner.CustomAttribute;
+using LinksMonitor.Interfaces.Stateful;
 using LinksMonitor.Interfaces.Stateless;
 using Orleans;
 using Orleans.Runtime.Configuration;
 using Serilog;
+using Shouldly;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -86,10 +88,13 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
         [ABusinessStepScenario((int)ScenarioSteps.SendValidSingleRequest, "Sending single request.")]
         public void SendValidSingleRequest()
         {
-            //var friend1 = _client.GetGrain<IGrain1>(0);
-            //var hellow = friend1.SayHello();
-            //_logger.Information("\n\n{0}\n\n", friend.SayHello().Result);
-            var friend = _client.GetGrain<IGrainPageDownloader>(Guid.NewGuid()).DownloadPage("http://en.wikipedia.org/").Result;
+            _client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.AmountWasCalled.ShouldBe(1);
+            _client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.AmountWasCalled.ShouldBe(2);
+            _client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.AmountWasCalled.ShouldBe(3);
+
+            
+
+            //var friend = _client.GetGrain<IGrainPageDownloader>(Guid.NewGuid()).DownloadPage("http://en.wikipedia.org/").Result;
 
         }
 

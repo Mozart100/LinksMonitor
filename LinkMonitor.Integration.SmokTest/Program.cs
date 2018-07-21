@@ -41,12 +41,6 @@ namespace LinkMonitor.Integration.SmokTest
             _logger.Information("Please press any key in order to exit.");
             Console.ReadKey();
 #endif
-
-
-            //elasticLowLevelClient.clos();
-
-
-
         }
 
         private static void CreateLogger()

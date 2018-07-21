@@ -11,20 +11,26 @@ namespace LinksMonitor.Grains.Stateless
     [StatelessWorker]
     public class GrainPageDownloader : Grain, IGrainPageDownloader
     {
-        public async Task<bool> DownloadPage(string uri)
+        public async Task<PageDownloaderResponse> DownloadPage(string uri)
         {
+            var siteContent = string.Empty;
+            HttpResponseMessage response = null;
             using (HttpClient client = new HttpClient())
             {
-                using (var response = await client.GetAsync(uri))
+                using (response = await client.GetAsync(uri))
                 {
                     using (HttpContent content = response.Content)
                     {
-                        string result = await content.ReadAsStringAsync();
+                        siteContent = await content.ReadAsStringAsync();
                     }
                 }
             }
 
-            return true;
+            return new PageDownloaderResponse
+            {
+                StatusCode = 200, //response.StatusCode.,
+                Content = siteContent,
+            };
         }
     }
 }
