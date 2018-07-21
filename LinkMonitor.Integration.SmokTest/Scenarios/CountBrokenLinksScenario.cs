@@ -29,9 +29,10 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
         {
             CleanAllRunningProcess,
             ActivateServer,
-            Wait15Second,
             ActivateClient,
             SendValidSingleRequest,
+
+            DisposeEverything,
         }
 
 
@@ -64,13 +65,7 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
                 .Parent;
             var brokenLinksMonitor = Path.Combine(directoryInfo.FullName, "LinksMonitor.Host", "bin", "Debug", "LinksMonitor.Host.exe");
             _server = Process.Start(brokenLinksMonitor);
-        }
 
-        //--------------------------------------------------------------------------------------------------------------------------------------
-
-        [AStepSetupScenario((int)ScenarioSteps.Wait15Second, "Waiting 10 seconds to let the server kick in.")]
-        public void Wait15Second()
-        {
             Thread.Sleep(TimeSpan.FromSeconds(10));
         }
 
@@ -96,6 +91,15 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
             //_logger.Information("\n\n{0}\n\n", friend.SayHello().Result);
             var friend = _client.GetGrain<IGrainPageDownloader>(Guid.NewGuid()).DownloadPage("http://en.wikipedia.org/").Result;
 
+        }
+
+        //--------------------------------------------------------------------------------------------------------------------------------------
+
+        [AStepCleanupScenario((int)ScenarioSteps.DisposeEverything, "Disposing from all processes")]
+        public void DisposeEverything()
+        {
+            CleanAllRunningProcesses_BrokenLinksMonitor();
+            _client.Close();
         }
 
 
