@@ -35,18 +35,20 @@ namespace LinksMonitor.Grains.Stateless
         }
 
 
-        public async Task<LinkStatistics> GetStatistics()
+        public async Task<LinkInfo> GetStatistics()
         {
+            var  copntent = "";
+
             if (string.IsNullOrEmpty(this.State.Content))
             {
                 var response = await _pageDownloader.DownloadPage(this.GetPrimaryKeyString());
-                State.Content = response.Content;
+                State.Content = copntent = response.Content;
             }
 
             var amount = ++this.State.Frequency;
             await this.WriteStateAsync();
 
-            return new LinkStatistics { Frequency = amount };
+            return new LinkInfo { LinkStatistics = new LinkStatistics { Frequency = amount } , HtmlContent = copntent };
         }
     }
 }

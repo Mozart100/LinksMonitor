@@ -26,7 +26,7 @@ namespace LinksMonitor.Grains.Stateless
             {
                 return new LinkStatistics { IsValid = false };
             }
-            return await _linkController.Store(uri);
+            return await _linkController.Store(uri, withSubUrls: false);
         }
     }
 }

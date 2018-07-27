@@ -34,6 +34,45 @@ namespace LinksMonitor.Grains.Stateless
             return false;
         }
 
+        public async Task<IList<string>> ExtractValidUrls(string htmlContent)
+        {
+            var list = new List<string>();
+            foreach (var line in htmlContent.Split('\n'))
+            {
+                if (ContainsAHref(line))
+                {
+                    var rowUrl = ExtractFromHref(line);
+                    var tmp = _filters.Any(predicate => predicate(rowUrl));
+
+                    if (tmp == true)
+                    {
+                        list.Add(rowUrl);
+                    }
+                }
+            }
+            return list;
+        }
+
+        private bool ContainsAHref(string line)
+        {
+            var regex = new Regex(@"<a .*href\s*=\s*""", RegexOptions.IgnoreCase);
+            var result = regex.Match(line);
+
+            return result.Success;
+
+        }
+
+        private string ExtractFromHref(string uri)
+        {
+            var length = "href=\"".Length;
+            var index = uri.IndexOf("href=");
+            var closeHref = uri.IndexOf("\"", index + length);
+
+            var result = uri.Substring(index + length, closeHref - index - length);
+
+            return result;
+
+        }
 
         private bool RegularSites(string uri)
         {

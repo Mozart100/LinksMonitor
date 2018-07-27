@@ -102,7 +102,7 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
             }
         }
 
-        [ABusinessStepScenario((int)ScenarioSteps.SendInvalidSingleRequest, "Sending single request.")]
+        [ABusinessStepScenario((int)ScenarioSteps.SendInvalidSingleRequest, "Sending requests.")]
         public void SendInvalidSingleRequest()
         {
             var response = _client.GetGrain<IDiscoveryGrain>(0).GetStatisctics("/w/load.php?debug=false&amp;lang=en&amp;modules=ext.gadget.charinsert-styles&amp;only=styles&amp;skin=vector").Result;

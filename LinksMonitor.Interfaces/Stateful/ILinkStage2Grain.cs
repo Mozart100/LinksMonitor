@@ -4,10 +4,19 @@ using Orleans;
 
 namespace LinksMonitor.Interfaces.Stateful
 {
+    public class LinkInfo
+    {
+        public LinkStatistics LinkStatistics { get; set; }
+        public string HtmlContent { get; set; }
+
+    }
+
     public interface ILinkStage
     {
-        Task<LinkStatistics> GetStatistics();
+        Task<LinkInfo> GetStatistics();
     }
+
+
 
     public interface ILinkStage2Grain : ILinkStage, IGrainWithStringKey
     {
