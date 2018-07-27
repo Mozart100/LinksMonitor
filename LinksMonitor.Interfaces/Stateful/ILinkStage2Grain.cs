@@ -5,7 +5,7 @@ namespace LinksMonitor.Interfaces.Stateful
 {
     public class LinkStatistics
     {
-        public long AmountWasCalled { get; set; }
+        public long Frequency { get; set; }
     }
 
     /// <summary>

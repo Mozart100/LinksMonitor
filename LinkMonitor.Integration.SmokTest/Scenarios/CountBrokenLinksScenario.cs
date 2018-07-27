@@ -88,9 +88,9 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
         [ABusinessStepScenario((int)ScenarioSteps.SendValidSingleRequest, "Sending single request.")]
         public void SendValidSingleRequest()
         {
-            _client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.AmountWasCalled.ShouldBe(1);
-            _client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.AmountWasCalled.ShouldBe(2);
-            _client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.AmountWasCalled.ShouldBe(3);
+            _client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.Frequency.ShouldBe(1);
+            _client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.Frequency.ShouldBe(2);
+            _client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.Frequency.ShouldBe(3);
 
             
 

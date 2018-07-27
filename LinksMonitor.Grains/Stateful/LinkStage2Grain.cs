@@ -10,7 +10,7 @@ namespace LinksMonitor.Grains.Stateful
     {
         public string Link { get; set; } = string.Empty;
 
-        public long AmountWasCalled { get; set; } = 0;
+        public long Frequency { get; set; } = 0;
 
         public string Content { get; set; }
 
@@ -31,9 +31,6 @@ namespace LinksMonitor.Grains.Stateful
         public override Task OnActivateAsync()
         {
             _pageDownloader = GrainFactory.GetGrain<IGrainPageDownloader>(0);
-            //_pageDownloader = GrainFactory.GetGrain<IGrainPageDownloader>(this.GetPrimaryKeyString().GetHashCode());
-
-
             return base.OnActivateAsync();
         }
 
@@ -46,10 +43,10 @@ namespace LinksMonitor.Grains.Stateful
                 State.Content = response.Content;
             }
 
-            var amount = ++this.State.AmountWasCalled;
+            var amount = ++this.State.Frequency;
             await this.WriteStateAsync();
 
-            return new LinkStatistics { AmountWasCalled = amount };
+            return new LinkStatistics { Frequency = amount };
         }
     }
 }
