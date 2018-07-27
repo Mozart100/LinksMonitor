@@ -43,7 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Stateful\ILinkStage2Grain.cs" />
-    <Compile Include="Stateless\IGrain1.cs" />
     <Compile Include="Stateless\IGrainPageDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

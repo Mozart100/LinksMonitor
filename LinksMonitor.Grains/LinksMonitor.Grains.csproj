@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Stateful\LinkStage2Grain.cs" />
-    <Compile Include="Stateless\Grain1.cs" />
     <Compile Include="Stateless\GrainPageDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
