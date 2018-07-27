@@ -4,6 +4,7 @@ using LinksMonitor.Interfaces.Stateful;
 using Orleans.Providers;
 using System.Collections.Generic;
 using LinksMonitor.Interfaces.Stateless;
+using System.Collections.Concurrent;
 
 namespace LinksMonitor.Grains.Stateful
 {
@@ -19,7 +20,12 @@ namespace LinksMonitor.Grains.Stateful
     /// </summary>
     public class LinkControllerGrain : Grain, ILinkControllerGrain
     {
-        private  HashSet<string> GenTwo { get; set; }
+        private ConcurrentDictionary<string, int> _storage;
+
+        public LinkControllerGrain()
+        {
+            _storage = new ConcurrentDictionary<string, int>();
+        }
 
         public async Task<int> IsExisting(string uri)
         {
@@ -31,9 +37,12 @@ namespace LinksMonitor.Grains.Stateful
 
         public async Task<LinkStatistics> Store(string uri)
         {
-            
-           var result =  await GrainFactory.GetGrain<ILinkStage2Grain>(uri).GetStatistics();
+            //if () 
+            var result = await GrainFactory.GetGrain<ILinkStage2Grain>(uri).GetStatistics();
             return result;
         }
+
+
+
     }
 }
