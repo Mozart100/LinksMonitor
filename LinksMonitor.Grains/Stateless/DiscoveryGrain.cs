@@ -7,7 +7,7 @@ using Orleans.Concurrency;
 namespace LinksMonitor.Grains.Stateless
 {
     [StatelessWorker]
-    public class GrainDiscovery : Grain, IDiscoveryGrain
+    public class DiscoveryGrain : Grain, IDiscoveryGrain
     {
         private ILinkControllerGrain _linkController;
 

@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="Stateful\LinkControllerGrain.cs" />
     <Compile Include="Stateful\LinkStage2Grain.cs" />
-    <Compile Include="Stateless\GrainDiscovery.cs" />
+    <Compile Include="Stateless\DiscoveryGrain.cs" />
     <Compile Include="Stateless\PageDownloaderGrain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

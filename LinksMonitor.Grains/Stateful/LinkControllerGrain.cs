@@ -3,6 +3,7 @@ using Orleans;
 using LinksMonitor.Interfaces.Stateful;
 using Orleans.Providers;
 using System.Collections.Generic;
+using LinksMonitor.Interfaces.Stateless;
 
 namespace LinksMonitor.Grains.Stateful
 {
@@ -32,8 +33,6 @@ namespace LinksMonitor.Grains.Stateful
         {
             
            var result =  await GrainFactory.GetGrain<ILinkStage2Grain>(uri).GetStatistics();
-            
-
             return result;
         }
     }

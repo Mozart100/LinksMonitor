@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using LinksMonitor.Interfaces.Stateless;
 using Orleans;
 
 namespace LinksMonitor.Interfaces.Stateful
@@ -7,10 +8,5 @@ namespace LinksMonitor.Interfaces.Stateful
     {
         Task<int> IsExisting(string uri);
         Task<LinkStatistics> Store(string uri);
-
-
-
     }
-
-
 }
