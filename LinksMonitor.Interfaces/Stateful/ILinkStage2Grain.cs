@@ -7,15 +7,9 @@ namespace LinksMonitor.Interfaces.Stateful
     public interface ILinkStage
     {
         Task<LinkStatistics> GetStatistics();
-
     }
 
     public interface ILinkStage2Grain : ILinkStage, IGrainWithStringKey
     {
     }
-
-    //public interface ILinkStage2Grain : IGrainWithStringKey
-    //{
-    //    Task<LinkStatistics> GetStatistics();
-    //}
 }

@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Stateful\ILinkControllerGrain.cs" />
+    <Compile Include="Stateless\ILinkStage0Grain.cs" />
+    <Compile Include="Stateless\ILinkStage1Grain.cs" />
     <Compile Include="Stateful\ILinkStage2Grain.cs" />
     <Compile Include="Stateless\IDiscoveryGrain.cs" />
     <Compile Include="Stateless\IPageDownloaderGrain.cs" />

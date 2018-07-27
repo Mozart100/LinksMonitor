@@ -83,7 +83,7 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
 
             _logger.Information("Client connected.");
 
-            
+
         }
 
         //--------------------------------------------------------------------------------------------------------------------------------------
@@ -91,14 +91,15 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
         [ABusinessStepScenario((int)ScenarioSteps.SendValidSingleRequest, "Sending single request.")]
         public void SendValidSingleRequest()
         {
-            //_client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.Frequency.ShouldBe(1);
-
-            var response = _client.GetGrain<IDiscoveryGrain>(0).GetStatisctics("http://en.wikipedia.org/").Result;
-            response.IsValid.ShouldBeTrue();
-            response.Frequency.ShouldBe(1);
-
-            _client.GetGrain<IDiscoveryGrain>(0).GetStatisctics("http://en.wikipedia.org/").Result.Frequency.ShouldBe(2);
-            _client.GetGrain<IDiscoveryGrain>(0).GetStatisctics("http://en.wikipedia.org/").Result.Frequency.ShouldBe(3);
+            for (int loop = 0; loop < 3; loop++)
+            {
+                for (int expected = 1; expected <= 20; expected++)
+                {
+                    var response = _client.GetGrain<IDiscoveryGrain>(0).GetStatisctics("http://en.wikipedia.org/").Result;
+                    response.IsValid.ShouldBeTrue();
+                    response.Frequency.ShouldBe(expected);
+                }
+            }
         }
 
         [ABusinessStepScenario((int)ScenarioSteps.SendInvalidSingleRequest, "Sending single request.")]

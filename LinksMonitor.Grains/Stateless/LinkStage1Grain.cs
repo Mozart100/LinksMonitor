@@ -1,27 +1,12 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Orleans;
-using LinksMonitor.Interfaces.Stateful;
-using Orleans.Providers;
 using LinksMonitor.Interfaces.Stateless;
+using Orleans.Providers;
 
-namespace LinksMonitor.Grains.Stateful
+namespace LinksMonitor.Grains.Stateless
 {
-    public class LinkStage2GrainState
-    {
-        public string Link { get; set; } = string.Empty;
-
-        public long Frequency { get; set; } = 0;
-
-        public string Content { get; set; }
-
-    }
-
-
     [StorageProvider(ProviderName = "OrleansStorage")]
-    /// <summary>
-    /// Grain implementation class LinkStage2Grain.
-    /// </summary>
-    public class LinkStage2Grain : Grain<LinkStage2GrainState>, ILinkStage2Grain
+    public class LinkStage1Grain : Grain<LinkStage2GrainState>, ILinkStage1Grain
     {
         private IPageDownloaderGrain _pageDownloader;
 

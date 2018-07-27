@@ -37,8 +37,39 @@ namespace LinksMonitor.Grains.Stateful
 
         public async Task<LinkStatistics> Store(string uri)
         {
-            //if () 
-            var result = await GrainFactory.GetGrain<ILinkStage2Grain>(uri).GetStatistics();
+            var stage = _storage.GetOrAdd(uri, key => 0);
+
+            var result = default(LinkStatistics);
+            switch (stage)
+            {
+
+                case 0:
+                    result = await GrainFactory.GetGrain<ILinkStage0Grain>(uri).GetStatistics();
+                    if (result.Frequency > 20)
+                    {
+                        result = await GrainFactory.GetGrain<ILinkStage1Grain>(uri).GetStatistics();
+                        _storage.AddOrUpdate(uri, 1, (key, value) => value+1);
+                    }
+                    break;
+
+                case 1:
+                    result = await GrainFactory.GetGrain<ILinkStage1Grain>(uri).GetStatistics();
+                    if (result.Frequency > 20)
+                    {
+                        result = await GrainFactory.GetGrain<ILinkStage2Grain>(uri).GetStatistics();
+                        _storage.AddOrUpdate(uri, 2, (key, value) => value+1);
+                    }
+                    break;
+
+                case 2:
+                    result = await GrainFactory.GetGrain<ILinkStage2Grain>(uri).GetStatistics();
+                    break;
+
+
+                default:
+                    break;
+            }
+
             return result;
         }
 
