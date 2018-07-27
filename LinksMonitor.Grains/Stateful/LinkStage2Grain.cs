@@ -23,14 +23,14 @@ namespace LinksMonitor.Grains.Stateful
     /// </summary>
     public class LinkStage2Grain : Grain<LinkStage2GrainState>, ILinkStage2Grain
     {
-        private IGrainPageDownloader _pageDownloader;
+        private IPageDownloaderGrain _pageDownloader;
 
         // TODO: replace placeholder grain interface with actual grain
         // communication interface(s).
 
         public override Task OnActivateAsync()
         {
-            _pageDownloader = GrainFactory.GetGrain<IGrainPageDownloader>(0);
+            _pageDownloader = GrainFactory.GetGrain<IPageDownloaderGrain>(0);
             return base.OnActivateAsync();
         }
 

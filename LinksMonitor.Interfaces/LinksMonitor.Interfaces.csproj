@@ -42,8 +42,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Stateful\ILinkControllerGrain.cs" />
     <Compile Include="Stateful\ILinkStage2Grain.cs" />
-    <Compile Include="Stateless\IGrainPageDownloader.cs" />
+    <Compile Include="Stateless\IDiscoveryGrain.cs" />
+    <Compile Include="Stateless\IPageDownloaderGrain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

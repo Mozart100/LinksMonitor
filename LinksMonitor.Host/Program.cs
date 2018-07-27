@@ -50,7 +50,7 @@ namespace LinksMonitor.Host
 
         private static void ClientCall(ClientConfiguration clientConfig, IClusterClient client)
         {
-            var friend = client.GetGrain<IGrainPageDownloader>(0);
+            var friend = client.GetGrain<IPageDownloaderGrain>(0);
             //var friend = client.GetGrain<IGrainPageDownloader>(Guid.NewGuid()).DownloadPage("http://en.wikipedia.org/");
             //var friend = client.GetGrain<IGrain1>(0);
             //var result = friend.SayHello().Result;

@@ -81,6 +81,8 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
             _client.Connect().Wait();
 
             _logger.Information("Client connected.");
+
+            
         }
 
         //--------------------------------------------------------------------------------------------------------------------------------------
@@ -88,14 +90,16 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
         [ABusinessStepScenario((int)ScenarioSteps.SendValidSingleRequest, "Sending single request.")]
         public void SendValidSingleRequest()
         {
-            _client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.Frequency.ShouldBe(1);
-            _client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.Frequency.ShouldBe(2);
-            _client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.Frequency.ShouldBe(3);
+            //_client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.Frequency.ShouldBe(1);
+            //_client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.Frequency.ShouldBe(2);
+            //_client.GetGrain<ILinkStage2Grain>("http://en.wikipedia.org/").GetStatistics().Result.Frequency.ShouldBe(3);
 
-            
+            var response = _client.GetGrain<IDiscoveryGrain>(0).GetStatisctics("http://en.wikipedia.org/").Result;
+            response.IsValid.ShouldBeTrue();
+            response.Frequency.ShouldBe(1);
 
-            //var friend = _client.GetGrain<IGrainPageDownloader>(Guid.NewGuid()).DownloadPage("http://en.wikipedia.org/").Result;
-
+            _client.GetGrain<IDiscoveryGrain>(0).GetStatisctics("http://en.wikipedia.org/").Result.Frequency.ShouldBe(2);
+            _client.GetGrain<IDiscoveryGrain>(0).GetStatisctics("http://en.wikipedia.org/").Result.Frequency.ShouldBe(3);
         }
 
         //--------------------------------------------------------------------------------------------------------------------------------------

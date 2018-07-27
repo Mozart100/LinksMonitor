@@ -43,8 +43,10 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Stateful\LinkControllerGrain.cs" />
     <Compile Include="Stateful\LinkStage2Grain.cs" />
-    <Compile Include="Stateless\GrainPageDownloader.cs" />
+    <Compile Include="Stateless\GrainDiscovery.cs" />
+    <Compile Include="Stateless\PageDownloaderGrain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

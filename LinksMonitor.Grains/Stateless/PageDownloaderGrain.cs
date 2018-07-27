@@ -9,7 +9,7 @@ using System.Net.Http;
 namespace LinksMonitor.Grains.Stateless
 {
     [StatelessWorker]
-    public class GrainPageDownloader : Grain, IGrainPageDownloader
+    public class PageDownloaderGrain : Grain, IPageDownloaderGrain
     {
         public async Task<PageDownloaderResponse> DownloadPage(string uri)
         {

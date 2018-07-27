@@ -6,6 +6,10 @@ namespace LinksMonitor.Interfaces.Stateful
     public class LinkStatistics
     {
         public long Frequency { get; set; }
+
+        public bool IsValid => Frequency != 0;
+
+
     }
 
     /// <summary>
