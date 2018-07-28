@@ -5,6 +5,7 @@ using Orleans.Providers;
 using System.Collections.Generic;
 using LinksMonitor.Interfaces.Stateless;
 using System.Collections.Concurrent;
+using Orleans.Concurrency;
 
 namespace LinksMonitor.Grains.Stateful
 {
@@ -15,9 +16,7 @@ namespace LinksMonitor.Grains.Stateful
     }
 
     //[StorageProvider(ProviderName = "OrleansStorage")]
-    /// <summary>
-    /// Grain implementation class LinkStage2Grain.
-    /// </summary>
+    [Reentrant]
     public class LinkControllerGrain : Grain, ILinkControllerGrain
     {
         private ConcurrentDictionary<string, int> _storage;
@@ -42,19 +41,11 @@ namespace LinksMonitor.Grains.Stateful
             return -1;
         }
 
-        public async Task<LinkStatistics> Store(string uri, bool withSubUrls)
+        public async Task<LinkInfo> Store(string uri, bool withSubUrls)
         {
             var result = await StoreUri(uri);
 
-            if (withSubUrls)
-            {
-                foreach (var item in await _validationUrl.ExtractValidUrls(result.HtmlContent))
-                {
-                    await StoreUri(item);
-                }
-            }
-
-            return result.LinkStatistics;
+            return result;
         }
 
         private async Task<LinkInfo> StoreUri(string uri)

@@ -29,7 +29,6 @@ namespace LinksMonitor.Grains.Stateless
                 {
                     return true;
                 }
-
             }
             return false;
         }
@@ -59,7 +58,6 @@ namespace LinksMonitor.Grains.Stateless
             var result = regex.Match(line);
 
             return result.Success;
-
         }
 
         private string ExtractFromHref(string uri)

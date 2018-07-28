@@ -31,7 +31,7 @@ namespace LinksMonitor.Grains.Stateless
             var amount = ++this.State.Frequency;
             await this.WriteStateAsync();
 
-            return new LinkInfo { LinkStatistics = new LinkStatistics { Frequency = amount }, HtmlContent = copntent };
+            return new LinkInfo { LinkStatistics = new LinkStatistics { Frequency = amount, Url = this.GetPrimaryKeyString() }, HtmlContent = copntent };
         }
     }
 }

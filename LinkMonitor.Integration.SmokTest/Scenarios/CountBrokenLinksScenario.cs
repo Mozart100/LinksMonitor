@@ -1,5 +1,4 @@
 ﻿using Ark.StepRunner.CustomAttribute;
-using LinksMonitor.Interfaces.Stateful;
 using LinksMonitor.Interfaces.Stateless;
 using Orleans;
 using Orleans.Runtime.Configuration;
@@ -9,9 +8,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-//using Orleans;
-//using Orleans.Runtime.Configuration;
-//using BrokenLinksMonitor.Grain.Interfaces;
+
 
 namespace LinkMonitor.Integration.SmokTest.Scenarios
 {
@@ -34,6 +31,7 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
             ActivateClient,
             SendValidSingleRequest,
             SendInvalidSingleRequest,
+            Dir,
 
             DisposeEverything,
         }
@@ -78,6 +76,7 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
         public void ActivateClient()
         {
             _clientConfig = ClientConfiguration.LocalhostSilo();
+            _clientConfig.StatisticsPerfCountersWriteInterval = TimeSpan.FromMinutes(1);
             _client = new ClientBuilder().UseConfiguration(_clientConfig).Build();
             _client.Connect().Wait();
 
@@ -91,6 +90,8 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
         [ABusinessStepScenario((int)ScenarioSteps.SendValidSingleRequest, "Sending single request.")]
         public void SendValidSingleRequest()
         {
+
+
             for (int loop = 0; loop < 3; loop++)
             {
                 for (int expected = 1; expected <= 20; expected++)
@@ -102,6 +103,8 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
             }
         }
 
+        //--------------------------------------------------------------------------------------------------------------------------------------
+
         [ABusinessStepScenario((int)ScenarioSteps.SendInvalidSingleRequest, "Sending requests.")]
         public void SendInvalidSingleRequest()
         {
@@ -109,6 +112,14 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
             response.IsValid.ShouldBeFalse();
         }
 
+        //--------------------------------------------------------------------------------------------------------------------------------------
+
+        [ABusinessStepScenario((int)ScenarioSteps.Dir, "Dir https://dotnet.github.io/orleans/Documentation/Introduction.html")]
+        public void Dir()
+        {
+            var response = _client.GetGrain<IDiscoveryGrain>(0).Dir("https://dotnet.github.io/orleans/Documentation/Introduction.html").Result;
+            response.Count.ShouldBeGreaterThan(1);
+        }
 
         //--------------------------------------------------------------------------------------------------------------------------------------
 
