@@ -14,6 +14,9 @@ namespace LinksMonitor.Interfaces.Stateful
     public interface ILinkStage
     {
         Task<LinkInfo> GetStatistics();
+
+        Task Init(long totalFrequency);
+
     }
 
 

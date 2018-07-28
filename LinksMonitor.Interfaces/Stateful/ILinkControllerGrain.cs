@@ -6,7 +6,6 @@ namespace LinksMonitor.Interfaces.Stateful
 {
     public interface ILinkControllerGrain : IGrainWithIntegerKey
     {
-        Task<int> IsExisting(string uri);
         Task<LinkInfo> Store(string uri,bool withSubUrls);
     }
 }

@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Stateful\LinkControllerGrain.cs" />
-    <Compile Include="Stateless\DiscoveryGrain - Copy.cs" />
     <Compile Include="Stateless\LinkStage0Grain.cs" />
     <Compile Include="Stateless\LinkStage1Grain.cs" />
     <Compile Include="Stateless\LinkStage2Grain.cs" />

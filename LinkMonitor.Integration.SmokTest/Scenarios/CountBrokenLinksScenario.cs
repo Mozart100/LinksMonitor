@@ -76,36 +76,36 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
         public void ActivateClient()
         {
             _clientConfig = ClientConfiguration.LocalhostSilo();
-            _clientConfig.StatisticsPerfCountersWriteInterval = TimeSpan.FromMinutes(1);
+            _clientConfig.StatisticsPerfCountersWriteInterval = TimeSpan.FromMinutes(1); 
+            _clientConfig.StatisticsMetricsTableWriteInterval = TimeSpan.FromMinutes(1); 
+            _clientConfig.StatisticsLogWriteInterval = TimeSpan.FromMinutes(1);
             _client = new ClientBuilder().UseConfiguration(_clientConfig).Build();
             _client.Connect().Wait();
 
             _logger.Information("Client connected.");
-
-
         }
 
         //--------------------------------------------------------------------------------------------------------------------------------------
 
-        [ABusinessStepScenario((int)ScenarioSteps.SendValidSingleRequest, "Sending single request.")]
+        [ABusinessStepScenario((int)ScenarioSteps.SendValidSingleRequest, "Sending requests.")]
         public void SendValidSingleRequest()
         {
-
-
+            var response = default(LinkStatistics);
             for (int loop = 0; loop < 3; loop++)
             {
                 for (int expected = 1; expected <= 20; expected++)
                 {
-                    var response = _client.GetGrain<IDiscoveryGrain>(0).GetStatisctics("http://en.wikipedia.org/").Result;
+                    response = _client.GetGrain<IDiscoveryGrain>(0).GetStatisctics("http://en.wikipedia.org/").Result;
                     response.IsValid.ShouldBeTrue();
                     response.Frequency.ShouldBe(expected);
+                    response.TotalFrequency.ShouldBe(loop * 20 + expected);
                 }
             }
         }
 
         //--------------------------------------------------------------------------------------------------------------------------------------
 
-        [ABusinessStepScenario((int)ScenarioSteps.SendInvalidSingleRequest, "Sending requests.")]
+        [ABusinessStepScenario((int)ScenarioSteps.SendInvalidSingleRequest, "Sending invalid request.")]
         public void SendInvalidSingleRequest()
         {
             var response = _client.GetGrain<IDiscoveryGrain>(0).GetStatisctics("/w/load.php?debug=false&amp;lang=en&amp;modules=ext.gadget.charinsert-styles&amp;only=styles&amp;skin=vector").Result;
@@ -117,8 +117,14 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
         [ABusinessStepScenario((int)ScenarioSteps.Dir, "Dir https://dotnet.github.io/orleans/Documentation/Introduction.html")]
         public void Dir()
         {
-            var response = _client.GetGrain<IDiscoveryGrain>(0).Dir("https://dotnet.github.io/orleans/Documentation/Introduction.html").Result;
+            var response = _client.GetGrain<IDiscoveryGrain>(0).Dir("http://en.wikipedia.org/").Result;
+            //var response = _client.GetGrain<IDiscoveryGrain>(0).Dir("https://dotnet.github.io/orleans/Documentation/Introduction.html").Result;
             response.Count.ShouldBeGreaterThan(1);
+
+            foreach (var item in response)
+            {
+                _logger.Information(item);
+            }
         }
 
         //--------------------------------------------------------------------------------------------------------------------------------------

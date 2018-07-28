@@ -7,7 +7,7 @@ using LinksMonitor.Interfaces.Stateful;
 namespace LinksMonitor.Grains.Stateless
 {
     [StorageProvider(ProviderName = "OrleansStorage")]
-    public class LinkStage0Grain : Grain<LinkStage2GrainState>, ILinkStage0Grain
+    public class LinkStage0Grain : Grain<LinkStageGrainState>, ILinkStage0Grain
     {
         private IPageDownloaderGrain _pageDownloader;
 
@@ -20,7 +20,7 @@ namespace LinksMonitor.Grains.Stateless
 
         public async Task<LinkInfo> GetStatistics()
         {
-            var copntent = "";
+            var copntent = this.State.Content;
 
             if (string.IsNullOrEmpty(this.State.Content))
             {
@@ -28,10 +28,24 @@ namespace LinksMonitor.Grains.Stateless
                 State.Content = copntent = response.Content;
             }
 
-            var amount = ++this.State.Frequency;
+            var amount = this.State.TotalFrequency = ++this.State.Frequency;
             await this.WriteStateAsync();
 
-            return new LinkInfo { LinkStatistics = new LinkStatistics { Frequency = amount, Url = this.GetPrimaryKeyString() }, HtmlContent = copntent };
+            return new LinkInfo
+            {
+                LinkStatistics = new LinkStatistics
+                {
+                    Frequency = amount,
+                    TotalFrequency = amount,
+                    Url = this.GetPrimaryKeyString()
+                },
+                HtmlContent = copntent
+            };
+        }
+
+        public async Task Init(long totalFrequency)
+        {
+            await Task.CompletedTask;
         }
     }
 }

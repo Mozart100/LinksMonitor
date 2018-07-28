@@ -40,39 +40,37 @@ namespace LinksMonitor.Grains.Stateless
             try
             {
                 var response = await _linkController.Store(uri, withSubUrls: false);
-                var tasks = new List<Task<LinkInfo>>();
-                var loop = 0;
-                foreach (var item in await _validationUrl.ExtractValidUrls(htmlContent: response.HtmlContent))
+                var urls = await _validationUrl.ExtractValidUrls(htmlContent: response.HtmlContent);
+                foreach (var list in SplitToChunks(urls, 10))
                 {
-                    loop++;
-
-                    if (loop == 10)
+                    var tasks = new List<Task<LinkInfo>>();
+                    foreach (var item in list)
                     {
-                        await Task.WhenAll(tasks.ToArray());
-                        foreach (var stat in tasks.Select(x => x.Result).Where(x => x.LinkStatistics.IsValid))
-                        {
-                            validUrls.Add(stat.LinkStatistics.Url);
-                        }
-                        tasks.Clear();
+                        tasks.Add(_linkController.Store(item, withSubUrls: false));
                     }
-                    tasks.Add(_linkController.Store(item, withSubUrls: false));
+                    await Task.WhenAll(tasks.ToArray());
+                    foreach (var stat in tasks.Select(x => x.Result).Where(x => x.LinkStatistics.IsValid))
+                    {
+                        validUrls.Add(stat.LinkStatistics.Url);
+                    }
                 }
-
-                await Task.WhenAll(tasks.ToArray());
-                foreach (var stat in tasks.Select(x => x.Result).Where(x => x.LinkStatistics.IsValid))
-                {
-                    validUrls.Add(stat.LinkStatistics.Url);
-                }
-
             }
             catch (System.Exception exception)
             {
-
                 int x = 0;
             }
-
-
             return validUrls;
+        }
+
+
+        private IEnumerable<IEnumerable<T>> SplitToChunks<T>(IEnumerable<T> source, int chunksize)
+        {
+            var pos = 0;
+            while (source.Skip(pos).Any())
+            {
+                yield return source.Skip(pos).Take(chunksize);
+                pos += chunksize;
+            }
         }
     }
 }
