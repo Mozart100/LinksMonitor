@@ -3,6 +3,7 @@ using Orleans;
 using LinksMonitor.Interfaces.Stateless;
 using Orleans.Providers;
 using LinksMonitor.Interfaces.Stateful;
+using System.Diagnostics;
 
 namespace LinksMonitor.Grains.Stateless
 {
@@ -10,9 +11,17 @@ namespace LinksMonitor.Grains.Stateless
     public class LinkStage1Grain : Grain<LinkStageGrainState>, ILinkStage1Grain
     {
         private IPageDownloaderGrain _pageDownloader;
+        private Stopwatch _stopwatch;
+
+        public LinkStage1Grain()
+        {
+            _stopwatch = new Stopwatch();
+        }
 
         public override Task OnActivateAsync()
         {
+            System.Console.WriteLine($"{this.GetType().Name} {this.GetPrimaryKeyString()}-  was activate!!!!!");
+            _stopwatch.Start();
             _pageDownloader = GrainFactory.GetGrain<IPageDownloaderGrain>(0);
             return base.OnActivateAsync();
         }
@@ -51,6 +60,14 @@ namespace LinksMonitor.Grains.Stateless
             await this.WriteStateAsync();
 
             await Task.CompletedTask;
+        }
+
+        public override Task OnDeactivateAsync()
+        {
+            _stopwatch.Stop();
+            System.Console.WriteLine($"{this.GetType().Name} {this.GetPrimaryKeyString()}-  was Deactivate after {_stopwatch.Elapsed.Minutes}");
+
+            return base.OnDeactivateAsync();
         }
     }
 }

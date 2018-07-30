@@ -1,6 +1,7 @@
 ﻿using System;
 using Ark.StepRunner;
 using Autofac;
+using LinkMonitor.Integration.SmokTest.Grains;
 using LinkMonitor.Integration.SmokTest.Scenarios;
 using Serilog;
 using Serilog.Core;
@@ -65,6 +66,7 @@ namespace LinkMonitor.Integration.SmokTest
             var container = new ContainerBuilder();
 
             container.RegisterType<CountBrokenLinksScenario>();
+            container.RegisterType<TraceGrain>();
             container.Register<ILogger>(x => _logger);
             return container.Build();
         }

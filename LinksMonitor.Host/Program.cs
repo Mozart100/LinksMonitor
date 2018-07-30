@@ -2,9 +2,12 @@ using System;
 using LinksMonitor.Grains.Stateless;
 using LinksMonitor.Interfaces.Stateless;
 using Orleans;
+using Orleans.Runtime;
 using Orleans.Runtime.Configuration;
 using Orleans.Runtime.Host;
 using Orleans.Storage;
+using Orleans.Telemetry.SerilogConsumer;
+using Serilog;
 
 namespace LinksMonitor.Host
 {
@@ -24,6 +27,13 @@ namespace LinksMonitor.Host
             //siloConfig.Globals.Application.SetCollectionAgeLimit(type: typeof(LinkStage1Grain), ageLimit: TimeSpan.FromMinutes(2));
             //siloConfig.Globals.Application.SetCollectionAgeLimit(type: typeof(LinkStage2Grain), ageLimit: TimeSpan.FromMinutes(3));
 
+            var logger = new Serilog.LoggerConfiguration()
+                            .WriteTo.Console()
+                            .CreateLogger();
+            var serilogConsumer = new SerilogConsumer(logger);
+
+            LogManager.LogConsumers.Add(serilogConsumer);
+            LogManager.TelemetryConsumers.Add(serilogConsumer);
 
             var silo = new SiloHost("TestSilo", siloConfig);
             silo.InitializeOrleansSilo();
@@ -44,7 +54,7 @@ namespace LinksMonitor.Host
             ////
 
             //ClientCall(clientConfig, client);
-            
+
 
             Console.WriteLine("\nPress Enter to terminate...");
             Console.ReadLine();

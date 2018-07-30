@@ -42,6 +42,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITraceGrain.cs" />
     <Compile Include="Stateful\ILinkControllerGrain.cs" />
     <Compile Include="Stateless\ILinkStage0Grain.cs" />
     <Compile Include="Stateless\ILinkStage1Grain.cs" />
