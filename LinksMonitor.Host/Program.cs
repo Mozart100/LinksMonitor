@@ -1,4 +1,5 @@
 using System;
+using LinksMonitor.Grains.Stateless;
 using LinksMonitor.Interfaces.Stateless;
 using Orleans;
 using Orleans.Runtime.Configuration;
@@ -17,6 +18,11 @@ namespace LinksMonitor.Host
             // First, configure and start a local silo
             var siloConfig = ClusterConfiguration.LocalhostPrimarySilo();
             siloConfig.Globals.RegisterStorageProvider<MemoryStorage>("OrleansStorage");
+            //siloConfig.Globals.Application.SetDefaultCollectionAgeLimit(ageLimit: TimeSpan.FromMinutes(5));
+
+            //siloConfig.Globals.Application.SetCollectionAgeLimit(type: typeof(LinkStage0Grain), ageLimit: TimeSpan.FromMinutes(1));
+            //siloConfig.Globals.Application.SetCollectionAgeLimit(type: typeof(LinkStage1Grain), ageLimit: TimeSpan.FromMinutes(2));
+            //siloConfig.Globals.Application.SetCollectionAgeLimit(type: typeof(LinkStage2Grain), ageLimit: TimeSpan.FromMinutes(3));
 
 
             var silo = new SiloHost("TestSilo", siloConfig);
