@@ -17,7 +17,6 @@ namespace LinksMonitor.Grains.Stateless
     {
         private IPageDownloaderGrain _pageDownloader;
         private Stopwatch _stopwatch;
-        private Random _random;
         private LinkStageGrainState _state;
 
         //private ObserverSubscriptionManager<ITraceGrain> _subsManager;
@@ -25,14 +24,12 @@ namespace LinksMonitor.Grains.Stateless
         public LinkStage0Grain()
         {
             _stopwatch = new Stopwatch();
-            _random = new Random();
-
             _state = new LinkStageGrainState();
         }
 
         public override Task OnActivateAsync()
         {
-            System.Console.WriteLine($"{this.GetType().Name} {this.GetPrimaryKeyString()} -  was activate!!!!!");
+            System.Console.WriteLine($"{this.GetType().Name} {this.GetPrimaryKeyString()} -  was activated!!!!!");
             _stopwatch.Start();
             _pageDownloader = GrainFactory.GetGrain<IPageDownloaderGrain>(this.GetPrimaryKeyString());
             //_subsManager = new ObserverSubscriptionManager<ITraceGrain>();

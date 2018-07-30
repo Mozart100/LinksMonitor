@@ -5,10 +5,12 @@ using Orleans.Runtime.Configuration;
 using Serilog;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
-
+using System.Threading.Tasks;
 
 namespace LinkMonitor.Integration.SmokTest.Scenarios
 {
@@ -77,9 +79,9 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
         public void ActivateClient()
         {
             _clientConfig = ClientConfiguration.LocalhostSilo();
-            _clientConfig.StatisticsPerfCountersWriteInterval = TimeSpan.FromMinutes(1); 
-            _clientConfig.StatisticsMetricsTableWriteInterval = TimeSpan.FromMinutes(1); 
-            _clientConfig.StatisticsLogWriteInterval = TimeSpan.FromMinutes(1);
+            //_clientConfig.StatisticsPerfCountersWriteInterval = TimeSpan.FromMinutes(1); 
+            //_clientConfig.StatisticsMetricsTableWriteInterval = TimeSpan.FromMinutes(1); 
+            //_clientConfig.StatisticsLogWriteInterval = TimeSpan.FromMinutes(1);
             _client = new ClientBuilder().UseConfiguration(_clientConfig).Build();
             _client.Connect().Wait();
 
@@ -118,13 +120,25 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
         [ABusinessStepScenario((int)ScenarioSteps.Dir, "Dir https://dotnet.github.io/orleans/Documentation/Introduction.html")]
         public void Dir()
         {
-            var response = _client.GetGrain<IDiscoveryGrain>(0).Dir("http://en.wikipedia.org/").Result;
-            //var response = _client.GetGrain<IDiscoveryGrain>(0).Dir("https://dotnet.github.io/orleans/Documentation/Introduction.html").Result;
-            response.Count.ShouldBeGreaterThan(1);
+            var response = _client.GetGrain<IDiscoveryGrain>(0).Dir("http://en.wikipedia.org/");
+            var response2 = _client.GetGrain<IDiscoveryGrain>(0).Dir("https://dotnet.github.io/orleans/Documentation/Introduction.html");
+            var response3 = _client.GetGrain<IDiscoveryGrain>(0).Dir("https://www.gigya.com/");
+            var response4 = _client.GetGrain<IDiscoveryGrain>(0).Dir("http://tvpixy.com/");
 
-            foreach (var item in response)
+
+            
+            Task.WaitAll(response, response2,response3,response4);
+
+            var list =new List<string>(response.Result);
+            list.AddRange(response2.Result);
+            list.AddRange(response3.Result);
+            list.AddRange(response4.Result);
+
+            _logger.Information("The valid Links are:");
+            var loop = 0;
+            foreach (var item in list)
             {
-                _logger.Information(item);
+                _logger.Information($"{loop++} : [{item}]");
             }
         }
         [ABusinessStepScenario((int)ScenarioSteps.Watch, "Watch until all Grains Finish")]

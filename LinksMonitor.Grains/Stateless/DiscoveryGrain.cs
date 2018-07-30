@@ -41,7 +41,7 @@ namespace LinksMonitor.Grains.Stateless
             {
                 var response = await _linkController.Store(uri);
                 var urls = await _validationUrl.ExtractValidUrls(htmlContent: response.HtmlContent);
-                foreach (var list in SplitToChunks(urls, 10))
+                foreach (var list in SplitToChunks(urls, 15))
                 {
                     var tasks = new List<Task<LinkInfo>>();
                     foreach (var item in list)

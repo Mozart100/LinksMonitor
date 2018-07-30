@@ -33,7 +33,7 @@ namespace LinksMonitor.Host
             var serilogConsumer = new SerilogConsumer(logger);
 
             LogManager.LogConsumers.Add(serilogConsumer);
-            LogManager.TelemetryConsumers.Add(serilogConsumer);
+            //LogManager.TelemetryConsumers.Add(serilogConsumer);
 
             var silo = new SiloHost("TestSilo", siloConfig);
             silo.InitializeOrleansSilo();

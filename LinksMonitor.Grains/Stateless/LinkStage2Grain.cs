@@ -38,7 +38,7 @@ namespace LinksMonitor.Grains.Stateless
         public override Task OnActivateAsync()
         {
 
-            System.Console.WriteLine($"{this.GetType().Name} {this.GetPrimaryKeyString()} -  was activate!!!!!");
+            System.Console.WriteLine($"{this.GetType().Name} {this.GetPrimaryKeyString()} -  was activated!!!!!");
             _stopwatch.Start();
             _pageDownloader = GrainFactory.GetGrain<IPageDownloaderGrain>(this.GetPrimaryKeyString());
             return base.OnActivateAsync();
