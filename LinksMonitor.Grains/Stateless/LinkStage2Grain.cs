@@ -4,6 +4,7 @@ using LinksMonitor.Interfaces.Stateful;
 using Orleans.Providers;
 using LinksMonitor.Interfaces.Stateless;
 using System.Diagnostics;
+using System;
 
 namespace LinksMonitor.Grains.Stateless
 {
@@ -19,38 +20,43 @@ namespace LinksMonitor.Grains.Stateless
     }
 
 
-    [StorageProvider(ProviderName = "OrleansStorage")]
-    public class LinkStage2Grain : Grain<LinkStageGrainState>, ILinkStage2Grain
+    //[StorageProvider(ProviderName = "OrleansStorage")]
+    public class LinkStage2Grain : Grain, ILinkStage2Grain
     {
         private IPageDownloaderGrain _pageDownloader;
         private Stopwatch _stopwatch;
+        private Random _random;
+        private LinkStageGrainState _state;
 
         public LinkStage2Grain()
         {
             _stopwatch = new Stopwatch();
+            _random = new Random();
+            _state = new LinkStageGrainState();
         }
 
         public override Task OnActivateAsync()
         {
+
             System.Console.WriteLine($"{this.GetType().Name} {this.GetPrimaryKeyString()} -  was activate!!!!!");
             _stopwatch.Start();
-            _pageDownloader = GrainFactory.GetGrain<IPageDownloaderGrain>(0);
+            _pageDownloader = GrainFactory.GetGrain<IPageDownloaderGrain>(this.GetPrimaryKeyString());
             return base.OnActivateAsync();
         }
 
         public async Task<LinkInfo> GetStatistics()
         {
-            var content = this.State.Content;
+            System.Console.WriteLine($"{this.GetType().Name} {this.GetPrimaryKeyString()} -  GetStatistics");
+            var content = this._state.Content;
 
-            if (string.IsNullOrEmpty(this.State.Content))
+            if (string.IsNullOrEmpty(this._state.Content))
             {
                 var response = await _pageDownloader.DownloadPage(this.GetPrimaryKeyString());
-                State.Content = content = response.Content;
+                _state.Content = content = response.Content;
             }
 
-            var totalFrequency = ++this.State.TotalFrequency;
-            var amount = ++this.State.Frequency;
-            await this.WriteStateAsync();
+            var totalFrequency = ++this._state.TotalFrequency;
+            var amount = ++this._state.Frequency;
 
             return new LinkInfo
             {
@@ -66,10 +72,7 @@ namespace LinksMonitor.Grains.Stateless
 
         public async Task Init(long totalFrequency)
         {
-            await this.ReadStateAsync();
-            this.State.TotalFrequency = totalFrequency;
-            await this.WriteStateAsync();
-
+            this._state.TotalFrequency = totalFrequency;
             await Task.CompletedTask;
         }
 

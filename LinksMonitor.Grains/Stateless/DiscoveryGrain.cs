@@ -29,7 +29,7 @@ namespace LinksMonitor.Grains.Stateless
                 return new LinkStatistics { IsValid = false };
             }
 
-            var response = await _linkController.Store(uri, withSubUrls: false);
+            var response = await _linkController.Store(uri);
             return response.LinkStatistics;
         }
 
@@ -39,14 +39,14 @@ namespace LinksMonitor.Grains.Stateless
 
             try
             {
-                var response = await _linkController.Store(uri, withSubUrls: false);
+                var response = await _linkController.Store(uri);
                 var urls = await _validationUrl.ExtractValidUrls(htmlContent: response.HtmlContent);
-                foreach (var list in SplitToChunks(urls, 5))
+                foreach (var list in SplitToChunks(urls, 10))
                 {
                     var tasks = new List<Task<LinkInfo>>();
                     foreach (var item in list)
                     {
-                        tasks.Add(_linkController.Store(item, withSubUrls: false));
+                        tasks.Add(_linkController.Store(item));
                     }
                     await Task.WhenAll(tasks.ToArray());
                     foreach (var stat in tasks.Select(x => x.Result).Where(x => x.LinkStatistics.IsValid))

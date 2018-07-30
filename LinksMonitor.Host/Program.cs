@@ -21,11 +21,11 @@ namespace LinksMonitor.Host
             // First, configure and start a local silo
             var siloConfig = ClusterConfiguration.LocalhostPrimarySilo();
             siloConfig.Globals.RegisterStorageProvider<MemoryStorage>("OrleansStorage");
-            //siloConfig.Globals.Application.SetDefaultCollectionAgeLimit(ageLimit: TimeSpan.FromMinutes(5));
+            siloConfig.Globals.Application.SetDefaultCollectionAgeLimit(ageLimit: TimeSpan.FromMinutes(1));
 
-            //siloConfig.Globals.Application.SetCollectionAgeLimit(type: typeof(LinkStage0Grain), ageLimit: TimeSpan.FromMinutes(1));
-            //siloConfig.Globals.Application.SetCollectionAgeLimit(type: typeof(LinkStage1Grain), ageLimit: TimeSpan.FromMinutes(2));
-            //siloConfig.Globals.Application.SetCollectionAgeLimit(type: typeof(LinkStage2Grain), ageLimit: TimeSpan.FromMinutes(3));
+            siloConfig.Globals.Application.SetCollectionAgeLimit(type: typeof(LinkStage0Grain), ageLimit: TimeSpan.FromMinutes(1));
+            siloConfig.Globals.Application.SetCollectionAgeLimit(type: typeof(LinkStage1Grain), ageLimit: TimeSpan.FromMinutes(2));
+            siloConfig.Globals.Application.SetCollectionAgeLimit(type: typeof(LinkStage2Grain), ageLimit: TimeSpan.FromMinutes(3));
 
             var logger = new Serilog.LoggerConfiguration()
                             .WriteTo.Console()
@@ -66,7 +66,7 @@ namespace LinksMonitor.Host
 
         private static void ClientCall(ClientConfiguration clientConfig, IClusterClient client)
         {
-            var friend = client.GetGrain<IPageDownloaderGrain>(0);
+            var friend = client.GetGrain<IPageDownloaderGrain>("arkovean");
             //var friend = client.GetGrain<IGrainPageDownloader>(Guid.NewGuid()).DownloadPage("http://en.wikipedia.org/");
             //var friend = client.GetGrain<IGrain1>(0);
             //var result = friend.SayHello().Result;

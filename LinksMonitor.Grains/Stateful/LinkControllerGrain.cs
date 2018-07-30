@@ -35,7 +35,7 @@ namespace LinksMonitor.Grains.Stateful
             return base.OnActivateAsync();
         }
 
-        public async Task<LinkInfo> Store(string uri, bool withSubUrls)
+        public async Task<LinkInfo> Store(string uri)
         {
             var result = await StoreUri(uri);
 

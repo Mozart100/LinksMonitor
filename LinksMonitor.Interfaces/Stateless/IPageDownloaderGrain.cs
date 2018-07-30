@@ -8,7 +8,7 @@ namespace LinksMonitor.Interfaces.Stateless
         public int  StatusCode { get; set; }
         public string Content { get; set; }
     }
-    public interface IPageDownloaderGrain : IGrainWithIntegerKey
+    public interface IPageDownloaderGrain : IGrainWithStringKey
     {
         Task<PageDownloaderResponse> DownloadPage(string uri);
     }

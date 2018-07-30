@@ -6,27 +6,35 @@ using LinksMonitor.Interfaces.Stateful;
 using Serilog;
 using LinksMonitor.Interfaces;
 using System.Diagnostics;
+using System;
+using Orleans.Concurrency;
 
 namespace LinksMonitor.Grains.Stateless
 {
-    [StorageProvider(ProviderName = "OrleansStorage")]
-    public class LinkStage0Grain : Grain<LinkStageGrainState>, ILinkStage0Grain
+    //[StorageProvider(ProviderName = "OrleansStorage")]
+    //[StatelessWorker]
+    public class LinkStage0Grain : Grain, ILinkStage0Grain
     {
         private IPageDownloaderGrain _pageDownloader;
         private Stopwatch _stopwatch;
+        private Random _random;
+        private LinkStageGrainState _state;
 
         //private ObserverSubscriptionManager<ITraceGrain> _subsManager;
 
         public LinkStage0Grain()
         {
             _stopwatch = new Stopwatch();
+            _random = new Random();
+
+            _state = new LinkStageGrainState();
         }
 
         public override Task OnActivateAsync()
         {
-            System.Console.WriteLine($"{this.GetType().Name} {this.GetPrimaryKeyString()}-  was activate!!!!!");
+            System.Console.WriteLine($"{this.GetType().Name} {this.GetPrimaryKeyString()} -  was activate!!!!!");
             _stopwatch.Start();
-            _pageDownloader = GrainFactory.GetGrain<IPageDownloaderGrain>(0);
+            _pageDownloader = GrainFactory.GetGrain<IPageDownloaderGrain>(this.GetPrimaryKeyString());
             //_subsManager = new ObserverSubscriptionManager<ITraceGrain>();
             return base.OnActivateAsync();
         }
@@ -34,16 +42,19 @@ namespace LinksMonitor.Grains.Stateless
 
         public async Task<LinkInfo> GetStatistics()
         {
-            var copntent = this.State.Content;
+            System.Console.WriteLine($"{this.GetType().Name} {this.GetPrimaryKeyString()} -  GetStatistics");
 
-            if (string.IsNullOrEmpty(this.State.Content))
+            var copntent = _state.Content;
+
+            if (string.IsNullOrEmpty(_state.Content))
             {
+                
+
                 var response = await _pageDownloader.DownloadPage(this.GetPrimaryKeyString());
-                State.Content = copntent = response.Content;
+                _state.Content = copntent = response.Content;
             }
 
-            var amount = this.State.TotalFrequency = ++this.State.Frequency;
-            await this.WriteStateAsync();
+            var amount = _state.TotalFrequency = ++_state.Frequency;
 
             return new LinkInfo
             {

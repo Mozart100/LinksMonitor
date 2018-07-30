@@ -8,7 +8,7 @@ using System.Net.Http;
 
 namespace LinksMonitor.Grains.Stateless
 {
-    [StatelessWorker]
+    //[StatelessWorker]
     public class PageDownloaderGrain : Grain, IPageDownloaderGrain
     {
         public async Task<PageDownloaderResponse> DownloadPage(string uri)
@@ -21,6 +21,8 @@ namespace LinksMonitor.Grains.Stateless
                 {
                     using (HttpContent content = response.Content)
                     {
+
+                        System.Console.WriteLine($"{this.GetType().Name} {this.GetPrimaryKeyString()} -  Reading Content");
                         siteContent = await content.ReadAsStringAsync();
                     }
                 }

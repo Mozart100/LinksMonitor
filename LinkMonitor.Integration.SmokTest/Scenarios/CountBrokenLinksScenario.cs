@@ -32,6 +32,7 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
             SendValidSingleRequest,
             SendInvalidSingleRequest,
             Dir,
+            Watch,
 
             DisposeEverything,
         }
@@ -125,6 +126,11 @@ namespace LinkMonitor.Integration.SmokTest.Scenarios
             {
                 _logger.Information(item);
             }
+        }
+        [ABusinessStepScenario((int)ScenarioSteps.Watch, "Watch until all Grains Finish")]
+        public void Watch()
+        {
+            Thread.Sleep(TimeSpan.FromMinutes(5));
         }
 
         //--------------------------------------------------------------------------------------------------------------------------------------
